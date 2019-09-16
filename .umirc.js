@@ -25,4 +25,7 @@ export default {
       },
     }],
   ],
+  define: {
+    'process.env': 'development', // development  production
+  },
 }

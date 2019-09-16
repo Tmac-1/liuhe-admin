@@ -1,22 +1,24 @@
 import styles from './index.css';
 import { Layout } from 'antd';
 import MySider from '../components/sider';
+import MyHeader from '../components/header';
+import cookies from 'js-cookie'
 
-const { Header } = Layout;
 
 function BasicLayout(props) {
   return (
     <div className={styles.normal}>
-      <Layout style={{ minHeight: '100vh' }}>
-          <MySider/>
+      {
+        cookies.get('x-auth-token') ? 
+        <Layout style={{ minHeight: '100vh' }}>
+          <MySider props={props}/>
           <Layout>
-              <Header>
-                12312
-              </Header>
+            <MyHeader/>
+            {props.children}
           </Layout>
-      </Layout>
-      {/* <h1 className={styles.title}>Yay! Welcome to umi!</h1> */}
-      {/* {props.children} */}
+       </Layout> : 
+        <> {props.children} </>  
+      }
     </div>
   );
 }

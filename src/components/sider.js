@@ -1,10 +1,18 @@
 import React from 'react';
 import { Layout,Menu,Icon } from 'antd';
+import Link from 'umi/link';
+import { connect } from 'dva';
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
-
+@connect(state=>({
+  location:state.router.location
+}))
 class MySider extends React.Component{
+    componentDidMount(){
+      const location  = this.props.location;
+      console.log('location',location)
+    }
     render(){
         return (
             <Sider>
@@ -18,9 +26,9 @@ class MySider extends React.Component{
                   </span>
                 }
               >
-                <Menu.Item key="3">案例管理</Menu.Item>
-                <Menu.Item key="4">文章管理</Menu.Item>
-                <Menu.Item key="5">其他</Menu.Item>
+                <Menu.Item key="1"> <Link to="/case">案例管理</Link> </Menu.Item>
+                <Menu.Item key="2">文章管理</Menu.Item>
+                <Menu.Item key="3">其他</Menu.Item>
               </SubMenu>
             </Menu>
           </Sider>
