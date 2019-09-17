@@ -12,11 +12,30 @@ class MySider extends React.Component{
     state={
       defaultSelectedKeys:1
     }
+    handleMeunClick = (key)=>{
+      // console.log(key)
+      this.setState({
+        defaultSelectedKeys:key.key
+      })
+    }
     componentDidMount(){
       const location  = this.props.location;
       console.log('location',location)
+      let key = 2;
+      switch(location.pathname){
+         case '/case':
+           key = 1;
+           break;
+         case '/article':
+           key = 2;
+           break;
+         default :
+           key =1;
+           break;
+      }
+      console.log('key',key)
       this.setState({
-          defaultSelectedKeys:1
+          defaultSelectedKeys:key
       })
       
     }
@@ -24,7 +43,11 @@ class MySider extends React.Component{
         const { defaultSelectedKeys } = this.state
         return (
             <Sider>
-            <Menu theme="dark" defaultSelectedKeys={[String(defaultSelectedKeys)]}  defaultOpenKeys={['1']} mode="inline">
+            <Menu theme="dark" 
+                  onClick={this.handleMeunClick}
+                  defaultSelectedKeys={['1']} 
+                  selectedKeys={[String(defaultSelectedKeys)]}  
+                  defaultOpenKeys={['1']} mode="inline">
               <SubMenu
                 key="1"
                 title={

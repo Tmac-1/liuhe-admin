@@ -9,7 +9,7 @@ function BasicLayout(props) {
   return (
     <div className={styles.normal}>
       {
-        cookies.get('x-auth-token') ? 
+        !cookies.get('x-auth-token') ? 
         <Layout style={{ minHeight: '100vh' }}>
           <MySider props={props}/>
           <Layout>
