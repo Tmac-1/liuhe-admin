@@ -12,7 +12,7 @@ class MyHeader extends React.Component{
             </Menu>
         );
         return(
-            <div style={{textAlign:'right',height:50,background:'#001529'}}>
+            <div style={{textAlign:'right',height:52,background:'#001529'}}>
                 <Dropdown overlay={menu}>
                 <a  href="#" style={{color:'#fff',paddingTop:15,paddingRight:30,display:'inline-block'}}>
                   已登录<Icon type="down" style={{paddingLeft:4}}/>

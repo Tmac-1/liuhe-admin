@@ -26,19 +26,14 @@ const data = [
     },
   ];
   
-class CaseManage extends React.Component{
+class ArticleManage extends React.Component{
     render(){
         const columns = [
             {
-              title: '案例名称',
+              title: '文章名',
               dataIndex: 'name',
               key: 'name',
               render: text => <a>{text}</a>,
-            },
-            {
-              title: '客户名称',
-              dataIndex: 'age',
-              key: 'age',
             },
             {
               title: '上传时间',
@@ -57,8 +52,8 @@ class CaseManage extends React.Component{
             },
          ];
         return(
-            <div className={styles.caseContainer}>
-                <Button type="primary">添加案例</Button>
+            <div className={styles.articleContainer}>
+                <Button type="primary">添加文章</Button>
                 <div style={{paddingTop:30}}>
                     <Table columns={columns} dataSource={data} />
                 </div>
@@ -67,6 +62,22 @@ class CaseManage extends React.Component{
     }
 }
 
-export default CaseManage;
+export default ArticleManage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
