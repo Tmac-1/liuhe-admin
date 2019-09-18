@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from './index.less';
-import { Button,Modal,Table } from 'antd';
+import { Button,Table,Tabs} from 'antd';
+import ArticleModal from './components/articleModal';
+const { TabPane } = Tabs;
 
 const data = [
     {
@@ -27,10 +29,16 @@ const data = [
   ];
   
 class ArticleManage extends React.Component{
+    state = {
+      articleModalVisible:false
+    }
+    handleTabChange = (key)=>{
+      console.log(key)
+    }
     render(){
         const columns = [
             {
-              title: '文章名',
+              title: '文章标题',
               dataIndex: 'name',
               key: 'name',
               render: text => <a>{text}</a>,
@@ -51,12 +59,25 @@ class ArticleManage extends React.Component{
               ),
             },
          ];
+         const { articleModalVisible } = this.state
         return(
             <div className={styles.articleContainer}>
-                <Button type="primary">添加文章</Button>
-                <div style={{paddingTop:30}}>
-                    <Table columns={columns} dataSource={data} />
-                </div>
+                <ArticleModal  
+                  visible={articleModalVisible}
+                  onCancle={()=>{this.setState({articleModalVisible:false})}}
+                />
+                <Button 
+                onClick={()=>{this.setState({articleModalVisible:true})}}
+                type="primary" 
+                >添加文章</Button>
+                  <Tabs defaultActiveKey="1" onChange={this.handleTabChange} style={{paddingTop:15}}>
+                    <TabPane tab="六合动态" key="1">
+                        <Table columns={columns} dataSource={data} />
+                    </TabPane>
+                    <TabPane tab="最新咨询" key="2">
+                        <Table columns={columns} dataSource={data} />
+                    </TabPane>
+                 </Tabs>
             </div>
         )
     }

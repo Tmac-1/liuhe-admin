@@ -21,13 +21,16 @@ class MySider extends React.Component{
     componentDidMount(){
       const location  = this.props.location;
       console.log('location',location)
-      let key = 2;
+      let key = 1;
       switch(location.pathname){
          case '/case':
            key = 1;
            break;
          case '/article':
            key = 2;
+           break;
+         case '/other':
+           key = 3;
            break;
          default :
            key =1;
@@ -59,7 +62,7 @@ class MySider extends React.Component{
               >
                 <Menu.Item key="1"> <Link to="/case">案例管理</Link> </Menu.Item>
                 <Menu.Item key="2"> <Link to="/article">文章管理</Link></Menu.Item>
-                <Menu.Item key="3">其他</Menu.Item>
+                <Menu.Item key="3"> <Link to="/other">其他</Link></Menu.Item>
               </SubMenu>
             </Menu>
           </Sider>

@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './index.less';
 import { Button,Modal,Table } from 'antd';
+import CaseModal from './components/caseModal'
 
 const data = [
     {
@@ -27,7 +28,11 @@ const data = [
   ];
   
 class CaseManage extends React.Component{
+    state={
+      caseModalVisible:false
+    }
     render(){
+        const { caseModalVisible } = this.state;
         const columns = [
             {
               title: '案例名称',
@@ -58,7 +63,15 @@ class CaseManage extends React.Component{
          ];
         return(
             <div className={styles.caseContainer}>
-                <Button type="primary">添加案例</Button>
+                <CaseModal
+                   visible={caseModalVisible}
+                   onCancle={()=>{this.setState({caseModalVisible:false})}}
+                /> 
+                <Button 
+                 onClick={()=>{this.setState({caseModalVisible:true})}}
+                 type="primary">
+                   添加案例
+                </Button>
                 <div style={{paddingTop:30}}>
                     <Table columns={columns} dataSource={data} />
                 </div>
