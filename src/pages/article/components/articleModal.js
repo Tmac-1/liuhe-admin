@@ -1,7 +1,11 @@
 import React from 'react';
 import { Modal,Upload,Form,Input, Select,Icon,Button  } from 'antd';
 import styles from './articleModal.less'
-const { Option } = Select
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+const upload = require('../../../utils/upload.js') 
+const { Option } = Select;
+
 
 
 @Form.create()
@@ -41,6 +45,7 @@ class ArticleModal extends React.Component{
             closable={false}
             destroyOnClose={true}
             wrapClassName={styles.articleModal}
+            width={1000}
            >
              <Form>
                <Form.Item label="文章类别">
@@ -73,6 +78,43 @@ class ArticleModal extends React.Component{
                     >
                         {fileList.length >= 1 ? null : uploadButton}
                     </Upload>
+               </Form.Item>
+               <Form.Item style={{marginBottom:15}}>
+                <CKEditor
+                        editor={ ClassicEditor }
+                        data="<p>Hello from CKEditor 5!</p>"
+                        config={{
+                            heading: {
+                                options: [
+                                    { model: 'paragraph', title: 'p', class: 'ck-heading_paragraph' },
+                                    { model: 'heading1', view: 'h1', title: 'h1', class: 'ck-heading_heading1' },
+                                    { model: 'heading2', view: 'h2', title: 'h2', class: 'ck-heading_heading2' },
+                                    { model: 'heading3', view: 'h3', title: 'h3', class: 'ck-heading_heading3' },
+                                    { model: 'heading4', view: 'h4', title: 'h4', class: 'ck-heading_heading4' },
+                                    { model: 'heading5', view: 'h5', title: 'h5', class: 'ck-heading_heading5' }
+                                ]
+                            },
+                            language: 'zh-cn',
+                            extraPlugins: [ upload.MyCustomUploadAdapterPlugin ],
+                        }}
+                        ckfinder={{
+                            uploadUrl: "http://6liuhe.oss-cn-beijing.aliyuncs.com"
+                        }}
+                        onInit={ editor => {
+                            // You can store the "editor" and use when it is needed.
+                            console.log( 'Editor is ready to use!', editor );
+                        } }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            console.log( { event, editor, data } );
+                        } }
+                        onBlur={ ( event, editor ) => {
+                            console.log( 'Blur.', editor );
+                        } }
+                        onFocus={ ( event, editor ) => {
+                            console.log( 'Focus.', editor );
+                        } }
+                    />
                </Form.Item>
                <Form.Item style={{textAlign:'right'}}>
                     <Button 

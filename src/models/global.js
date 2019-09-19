@@ -1,4 +1,4 @@
-import { test } from '../service/global'
+import { test } from '../service/global';
 
 export default {
     namespace:'global',
@@ -9,7 +9,7 @@ export default {
         *test({payload},{call,put}){
             console.log(222)
             const data = yield call(test)
-        }
+        },
     },
     reducers:{
 
