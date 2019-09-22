@@ -1,61 +1,76 @@
 import React from 'react';
 import styles from './index.less';
-import { Button,Modal,Table } from 'antd';
-import CaseModal from './components/caseModal'
-
-const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-  ];
+import { Button,Table } from 'antd';
+import CaseModal from './components/caseModal';
+import { connect } from 'dva';
+import moment from 'moment';
   
+@connect(state=>({
+  case:state.case,
+  loading:state.loading
+}))
 class CaseManage extends React.Component{
     state={
-      caseModalVisible:false
+      caseModalVisible:false,
+      type:'add'
+    }
+    getCaseList = (page=0)=>{
+      const { dispatch } = this.props;
+      dispatch({
+        type:'case/getCaseList',
+        paylaod:{
+          page
+        }
+      })
+    }
+    editCase = (id)=>{
+      this.setState({
+        type:'edit'
+      })
+      const { dispatch } = this.props;
+      dispatch({
+         type:'case/getCaseDetail',
+         paylaod:{
+           id
+         }
+      })
+    }
+    handlePageChange =(current)=>{
+      this.getCaseList(current-1)
+    }
+    componentDidMount(){
+      this.getCaseList()
     }
     render(){
-        const { caseModalVisible } = this.state;
+        const { caseModalVisible,type } = this.state;
+        const { caseList } = this.props.case;
+        const { loading } = this.props;
+        // console.log('caseList',caseList)
         const columns = [
             {
               title: '案例名称',
-              dataIndex: 'name',
-              key: 'name',
-              render: text => <a>{text}</a>,
+              dataIndex: 'title',
+              key: 'title',
+              render: (text,record) => <a>{record.title}</a>,
             },
             {
               title: '客户名称',
-              dataIndex: 'age',
-              key: 'age',
+              dataIndex: 'customerName',
+              key: 'customerName',
+              render: (text,record) => <a>{record.customerName}</a>,
             },
             {
-              title: '上传时间',
-              dataIndex: 'address',
-              key: 'address',
+              title: '更新时间',
+              dataIndex: 'modifyTime',
+              key: 'modifyTime',
+              render: (text,record) => <span>{moment(record.modifyTime).format('YYYY-MM-DD HH:mm:ss')}</span>
             },
             {
               title: '操作',
               key: 'action',
               render: (text, record) => (
                 <span>
-                   <Button type="primary" style={{marginRight:10}}>编辑</Button>
+                   <Button type="primary" style={{marginRight:10}} onClick={this.editCase.bind(this,record.id)}>编辑</Button>
                    <Button type="danger">删除</Button>
                 </span>
               ),
@@ -63,17 +78,35 @@ class CaseManage extends React.Component{
          ];
         return(
             <div className={styles.caseContainer}>
-                <CaseModal
-                   visible={caseModalVisible}
-                   onCancle={()=>{this.setState({caseModalVisible:false})}}
-                /> 
+            {
+              caseModalVisible && 
+              <CaseModal
+                type={type}
+                visible={caseModalVisible}
+                onCancle={()=>{this.setState({caseModalVisible:false})}}
+              /> 
+            }
                 <Button 
-                 onClick={()=>{this.setState({caseModalVisible:true})}}
+                 onClick={()=>{this.setState({caseModalVisible:true,type:'add'})}}
                  type="primary">
                    添加案例
                 </Button>
                 <div style={{paddingTop:30}}>
-                    <Table columns={columns} dataSource={data} />
+                    <Table 
+                    rowKey="id"
+                    columns={columns} 
+                    dataSource={caseList.record}
+                    loading={loading.effects['case/getCaseList']} 
+                    pagination={{
+                      total: caseList.totalPage, //数据总数量
+                      defaultPageSize: 10, //默认显示几条一页
+                      showSizeChanger: false,  //是否显示可以设置几条一页的选项
+                      onChange:this.handlePageChange,
+                      showTotal: function () {  //设置显示一共几条数据
+                          return '共 ' + caseList.totalPage + ' 条数据';
+                      }
+                  }}
+                    />
                 </div>
             </div>
         )

@@ -24,21 +24,16 @@ function checkStatus(response) {
 export default async function request(url, options) {
   const response = await fetch(
      url.startsWith('http') ? url : serverUrl.concat(url),
-     Object.assign({},options,{headers:{'x-auth-token':cookie.get('x-auth-token') || ''}}) 
+     Object.assign({},options,
+      { 
+        // headers:{'x-auth-token':cookie.get('x-auth-token') || ''},
+        mode: 'cors',
+      }) 
    );
-
+  // console.log('response',response)
   checkStatus(response);
 
+  // const data = await response;
   const data = await response.json();
-
-  const ret = {
-    data,
-    headers: {},
-  };
-
-  if (response.headers.get('x-total-count')) {
-    ret.headers['x-total-count'] = response.headers.get('x-total-count');
-  }
-
-  return ret;
+  return data;
 }

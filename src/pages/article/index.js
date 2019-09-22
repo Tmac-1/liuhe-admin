@@ -62,10 +62,14 @@ class ArticleManage extends React.Component{
          const { articleModalVisible } = this.state
         return(
             <div className={styles.articleContainer}>
-                <ArticleModal  
-                  visible={articleModalVisible}
-                  onCancle={()=>{this.setState({articleModalVisible:false})}}
-                />
+            {
+              articleModalVisible && 
+              <ArticleModal  
+                visible={articleModalVisible}
+                onCancle={()=>{this.setState({articleModalVisible:false})}}
+              />
+            }
+
                 <Button 
                 onClick={()=>{this.setState({articleModalVisible:true})}}
                 type="primary" 

@@ -28,4 +28,11 @@ export default {
   define: {
     'process.env': 'development', // development  production
   },
+  // "proxy": {
+  //   "/mis": {
+  //     "target": "http://home.dullnull.org:8080",
+  //     "changeOrigin": true,
+  //     // "pathRewrite": { "^/api" : "" }
+  //   }
+  // }
 }
