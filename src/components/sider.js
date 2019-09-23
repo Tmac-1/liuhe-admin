@@ -23,20 +23,20 @@ class MySider extends React.Component{
       console.log('location',location)
       let key = 1;
       switch(location.pathname){
-         case '/case':
+         case '/case.html':
            key = 1;
            break;
-         case '/article':
+         case '/article.html':
            key = 2;
            break;
-         case '/other':
+         case '/other.html':
            key = 3;
            break;
          default :
            key =1;
            break;
       }
-      console.log('key',key)
+      // console.log('key',key)
       this.setState({
           defaultSelectedKeys:key
       })

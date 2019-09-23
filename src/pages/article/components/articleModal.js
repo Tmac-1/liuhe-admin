@@ -3,7 +3,9 @@ import { Modal,Upload,Form,Input, Select,Icon,Button  } from 'antd';
 import styles from './articleModal.less'
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-const upload = require('../../../utils/upload.js') 
+import { uploadImg } from '../../../utils/utils'
+const upload = require('../../../utils/upload.js');
+
 const { Option } = Select;
 
 
@@ -14,13 +16,33 @@ class ArticleModal extends React.Component{
         previewVisible: false,
         previewImage: '',
         fileList: [
-          {
-            uid: '-1',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          }
+        //   {
+        //     uid: '-1',
+        //     name: 'image.png',
+        //     status: 'done',
+        //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        //   }
         ],
+    }
+    handleCustomRequest = (info)=>{
+        uploadImg(info).then(res=>{
+            this.setState({
+                fileList:this.state.fileList.concat({uid:res.name,url:`http://img.bjliuhe.net.cn/${res.name}`})
+            })
+        })
+    }
+    handleSubmit =  (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+
+        })
+    }
+    handleRemove = (info)=>{
+        const fileListCopy = [...this.state.fileList];
+        fileListCopy.splice(fileListCopy.findIndex(item=>item.uid === info.uid),1)
+        this.setState({
+            fileList: fileListCopy
+        });
     }
     handlePreview = file => {
         this.setState({
@@ -47,7 +69,7 @@ class ArticleModal extends React.Component{
             wrapClassName={styles.articleModal}
             width={1000}
            >
-             <Form>
+             <Form onSubmit={this.handleSubmit}>
                <Form.Item label="文章类别">
                    {getFieldDecorator('name', {
                        rules: [{
@@ -75,6 +97,8 @@ class ArticleModal extends React.Component{
                         fileList={fileList}
                         onPreview={this.handlePreview}
                         accept="image/gif,image/jpeg,image/jpg,image/png"
+                        customRequest={this.handleCustomRequest}
+                        onRemove={this.handleRemove}
                     >
                         {fileList.length >= 1 ? null : uploadButton}
                     </Upload>
@@ -109,7 +133,7 @@ class ArticleModal extends React.Component{
                             console.log( { event, editor, data } );
                         } }
                         onBlur={ ( event, editor ) => {
-                            console.log( 'Blur.', editor );
+                            console.log( 'Blur.', editor,editor.getData() );
                         } }
                         onFocus={ ( event, editor ) => {
                             console.log( 'Focus.', editor );
