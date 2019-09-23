@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { addCase, getCaseList,getCaseDeatil } from './service';
+import { addCase, getCaseList,getCaseDeatil,editCaseDeatil } from './service';
 
 export default {
     namespace:'case',
@@ -11,10 +11,17 @@ export default {
         *addCase({paylaod},{call,put}){
            const data =  yield call(addCase,paylaod);
         //    console.log("data",data)
-           if(data && data.data.status == 200){
+           if(data && data.code == 200){
                message.success('案例添加成功~')
            }
         },
+        *editCaseDeatil({paylaod},{call,put}){
+            const data =  yield call(editCaseDeatil,paylaod);
+         //    console.log("data",data)
+            if(data && data.code == 200){
+                message.success('案例添加成功~')
+            }
+         },
         *getCaseList({paylaod},{call,put}){
             const data =  yield call(getCaseList,paylaod);
             // console.log("data",data)

@@ -37,6 +37,7 @@ class CaseModal extends React.Component{
      handleSubmit =  (e) => {
         e.preventDefault();
         const { dispatch } = this.props;
+        const { type } = this.props
         this.props.form.validateFields((err, values) => {
           if (!err) {
             console.log('Received values of form: ', values);
@@ -54,20 +55,38 @@ class CaseModal extends React.Component{
                 customerName:values.clientName,
                 serviceContent:values.serviceItem,
                 description:values.desc,
-                colorMode:values.color,
+                colorModel:values.color,
                 image:this.state.fileList.map(item=>item.url).join(','),
                 coverImage:this.state.fileList02.map(item=>item.url).join(',')
             }
-             dispatch({
-                type:'case/addCase',
-                paylaod:params
-            }).then(()=>{
-                this.props.onCancle()
-                this.setState({
-                    fileList:[],
-                    fileList02:[]
+            if(type == 'edit'){
+                dispatch({
+                    type:'case/editCaseDeatil',
+                    paylaod:{
+                        ...params,
+                        id:this.props.caseId
+                    }
+                }).then(()=>{
+                    this.props.onCancle()
+                    this.setState({
+                        fileList:[],
+                        fileList02:[]
+                    })
                 })
-            })
+            }else{
+                dispatch({
+                    type:'case/addCase',
+                    paylaod:params
+                }).then(()=>{
+                    this.props.onCancle();
+                    this.props.callback()
+                    this.setState({
+                        fileList:[],
+                        fileList02:[]
+                    })
+                })
+            }
+
           }
         });
     }
@@ -103,6 +122,39 @@ class CaseModal extends React.Component{
     }
     componentDidMount(){
         // console.log('componentDidMount')
+        const { type } = this.props;
+        if(type=='edit'){
+            const { caseDetail } = this.props.case;
+            console.log('caseDetail',caseDetail)
+            this.props.form.setFieldsValue({
+                caseType:caseDetail.type,
+                name:caseDetail.title,
+                clientName:caseDetail.customerName,
+                serviceItem:caseDetail.serviceContent,
+                desc:caseDetail.description,
+                color:caseDetail.colorModel,
+            })
+            if(caseDetail.image){
+                this.setState({
+                    fileList:caseDetail.image.split(',').map((item,index)=>{
+                        let obj={};
+                        obj.url=item;
+                        obj.uid=index;
+                        return obj;
+                    })
+                })
+            }
+            if(caseDetail.coverImage){
+                this.setState({
+                    fileList02:caseDetail.coverImage.split(',').map((item,index)=>{
+                        let obj={};
+                        obj.url=item;
+                        obj.uid=index;
+                        return obj;
+                    })
+                })
+            }
+        }
     }
     render(){
         const { getFieldDecorator } = this.props.form;
@@ -195,7 +247,7 @@ class CaseModal extends React.Component{
                             customRequest={this.handleCustomRequest.bind(this,2)}
                             onRemove={this.handleRemove.bind(this,2)}
                           >
-                              {fileList.length >= 1 ? null : uploadButton}
+                              {fileList02.length >= 1 ? null : uploadButton}
                           </Upload>
                     </Form.Item>
                     <Form.Item label={<span> <span style={{color:"#f5222d",fontFamily:"SimSun"}}>*</span> 案例图片</span>}>

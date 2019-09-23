@@ -12,7 +12,9 @@ import moment from 'moment';
 class CaseManage extends React.Component{
     state={
       caseModalVisible:false,
-      type:'add'
+      caseId:'',
+      type:'add',
+      current:1
     }
     getCaseList = (page=0)=>{
       const { dispatch } = this.props;
@@ -24,25 +26,38 @@ class CaseManage extends React.Component{
       })
     }
     editCase = (id)=>{
-      this.setState({
-        type:'edit'
-      })
-      const { dispatch } = this.props;
-      dispatch({
-         type:'case/getCaseDetail',
-         paylaod:{
-           id
-         }
-      })
+        const { dispatch } = this.props;
+        dispatch({
+           type:'case/getCaseDetail',
+           paylaod:{
+             id
+           }
+        }).then(()=>{
+          this.setState({
+            type:'edit',
+            caseModalVisible:true,
+            caseId:id
+          })
+        })
+    }
+    handleCallback=()=>{
+         this.setState({
+           current:1
+         },()=>{
+          this.handlePageChange(this.state.current)
+         })
     }
     handlePageChange =(current)=>{
+      this.setState({
+        current
+      })
       this.getCaseList(current-1)
     }
     componentDidMount(){
       this.getCaseList()
     }
     render(){
-        const { caseModalVisible,type } = this.state;
+        const { caseModalVisible,type,caseId,current } = this.state;
         const { caseList } = this.props.case;
         const { loading } = this.props;
         // console.log('caseList',caseList)
@@ -51,13 +66,13 @@ class CaseManage extends React.Component{
               title: '案例名称',
               dataIndex: 'title',
               key: 'title',
-              render: (text,record) => <a>{record.title}</a>,
+              render: (text,record) => <span>{record.title}</span>,
             },
             {
               title: '客户名称',
               dataIndex: 'customerName',
               key: 'customerName',
-              render: (text,record) => <a>{record.customerName}</a>,
+              render: (text,record) => <span>{record.customerName}</span>,
             },
             {
               title: '更新时间',
@@ -81,9 +96,11 @@ class CaseManage extends React.Component{
             {
               caseModalVisible && 
               <CaseModal
+                caseId={caseId}
                 type={type}
                 visible={caseModalVisible}
                 onCancle={()=>{this.setState({caseModalVisible:false})}}
+                callback={this.handleCallback}
               /> 
             }
                 <Button 
@@ -97,6 +114,7 @@ class CaseManage extends React.Component{
                     columns={columns} 
                     dataSource={caseList.record}
                     loading={loading.effects['case/getCaseList']} 
+                    current={current}
                     pagination={{
                       total: caseList.totalPage, //数据总数量
                       defaultPageSize: 10, //默认显示几条一页
