@@ -27,7 +27,7 @@ export async function editNewsDeatil(params){
 }
 
 export async function getNewsList(params){
-    return request(`/mis/newss?page=${params.page}`,{
+    return request(`/mis/newses?page=${params.page}`,{
         method:'get',
     })
 }

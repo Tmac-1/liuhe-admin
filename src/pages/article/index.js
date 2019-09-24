@@ -74,14 +74,17 @@ class ArticleManage extends React.Component{
                 onClick={()=>{this.setState({articleModalVisible:true})}}
                 type="primary" 
                 >添加文章</Button>
-                  <Tabs defaultActiveKey="1" onChange={this.handleTabChange} style={{paddingTop:15}}>
+                <div style={{marginTop:15}}>
+                   <Table columns={columns} dataSource={data} />
+                </div>
+                  {/* <Tabs defaultActiveKey="1" onChange={this.handleTabChange} style={{paddingTop:15}}>
                     <TabPane tab="六合动态" key="1">
                         <Table columns={columns} dataSource={data} />
                     </TabPane>
                     <TabPane tab="最新咨询" key="2">
                         <Table columns={columns} dataSource={data} />
                     </TabPane>
-                 </Tabs>
+                 </Tabs> */}
             </div>
         )
     }
