@@ -4,6 +4,6 @@ if(process.env == 'development'){
     }
 }else{
     module.exports = {
-        serverUrl:'http://mis.51zouchuqu.com',
+        serverUrl:'http://home.dullnull.org:8080',
     }
 }

@@ -8,7 +8,7 @@ export default {
       antd: true,
       dva: true,
       dynamicImport: { webpackChunkName: true },
-      title: 'liuhe-admin',
+      title: '六合-后台管理',
       dll: true,
       locale: {
         enable: true,

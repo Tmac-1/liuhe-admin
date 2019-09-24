@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "start": "umi dev",
-    "build": "umi build",
+    "build:dev": "cross-env UMI_ENV=local umi build",
+    "build:prod": "cross-env UMI_ENV=prod umi build",
     "test": "umi test",
     "lint": "eslint --ext .js src mock tests",
     "precommit": "lint-staged"
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
+    "cross-env": "^6.0.0",
     "eslint": "^5.4.0",
     "eslint-config-umi": "^1.4.0",
     "eslint-plugin-flowtype": "^2.50.0",

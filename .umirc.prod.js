@@ -7,7 +7,7 @@ export default {
       antd: true,
       dva: true,
       dynamicImport: true,
-      title: 'zcqIM',
+      title: '六合-后台管理',
       dll: false,
       routes: {
         exclude: [],
