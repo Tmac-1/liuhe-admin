@@ -9,7 +9,7 @@ function BasicLayout(props) {
   return (
     <div className={styles.normal}>
       {
-        !cookies.get('token') ? 
+        cookies.get('liuhe-token') ? 
         <Layout style={{ minHeight: '100vh' }}>
           <MySider props={props}/>
           <Layout>
@@ -20,6 +20,9 @@ function BasicLayout(props) {
         <> {props.children} </>  
       }
     </div>
+
+
+
   );
 }
 

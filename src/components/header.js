@@ -1,12 +1,17 @@
 import React from 'react';
 import { Menu, Dropdown, Icon } from 'antd';
+import cookies from 'js-cookie';
+import  router from 'umi/router'
 
 class MyHeader extends React.Component{
-
+    exit = ()=>{
+        cookies.remove("liuhe-token")
+        router.push('/')
+    }
     render(){
         const menu = (
             <Menu>
-              <Menu.Item>
+              <Menu.Item onClick={this.exit}>
                  退出登录  
               </Menu.Item>
             </Menu>

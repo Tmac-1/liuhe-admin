@@ -2,6 +2,8 @@ import React from 'react';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import styles from './index.less';
 import logo from '../assets/logo.png';
+import router from 'umi/router';
+import cookies from 'js-cookie'
 
 @Form.create()
 class Login extends React.Component{
@@ -10,6 +12,10 @@ class Login extends React.Component{
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        if(values.username == 'admin' && values.password == 'liuhe123456'){
+          router.push('/case');
+          cookies.set('liuhe-token','123456')
+        }
       }
     });
   };

@@ -66,7 +66,7 @@ class CaseManage extends React.Component{
               title: '案例名称',
               dataIndex: 'title',
               key: 'title',
-              render: (text,record) => <span>{record.title}</span>,
+              render: (text,record) => <span style={{color:'#1890ff'}}>{record.title}</span>,
             },
             {
               title: '客户名称',
@@ -114,12 +114,12 @@ class CaseManage extends React.Component{
                     columns={columns} 
                     dataSource={caseList.record}
                     loading={loading.effects['case/getCaseList']} 
-                    current={current}
                     pagination={{
                       total: caseList.totalPage, //数据总数量
                       defaultPageSize: 10, //默认显示几条一页
                       showSizeChanger: false,  //是否显示可以设置几条一页的选项
                       onChange:this.handlePageChange,
+                      current:current,
                       showTotal: function () {  //设置显示一共几条数据
                           return '共 ' + caseList.totalPage + ' 条数据';
                       }

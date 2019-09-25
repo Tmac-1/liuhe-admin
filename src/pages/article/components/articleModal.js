@@ -1,16 +1,20 @@
 import React from 'react';
-import { Modal,Upload,Form,Input, Select,Icon,Button  } from 'antd';
+import { Modal,Upload,Form,Input, Select,Icon,Button,message  } from 'antd';
 import styles from './articleModal.less'
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { uploadImg } from '../../../utils/utils'
+import { uploadImg } from '../../../utils/utils';
+import { connect } from 'dva'
 const upload = require('../../../utils/upload.js');
-
 const { Option } = Select;
+const { TextArea } = Input;
 
 
 
 @Form.create()
+@connect(state=>({
+    article:state.article
+}))
 class ArticleModal extends React.Component{
     state={
         previewVisible: false,
@@ -23,6 +27,7 @@ class ArticleModal extends React.Component{
         //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
         //   }
         ],
+        articleData:'<p>欢迎编辑文章!</p>'
     }
     handleCustomRequest = (info)=>{
         uploadImg(info).then(res=>{
@@ -34,6 +39,51 @@ class ArticleModal extends React.Component{
     handleSubmit =  (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
+            if(!err){
+                const { dispatch,type,id } = this.props;
+                if(this.state.fileList.length ==0){
+                    message.error('请上传文章封面图');
+                    return;
+                }
+                let params = {
+                    type:values.type,
+                    title:values.name,
+                    summary:values.abstract,
+                    coverImgUrl:this.state.fileList[0].url,
+                    content:this.state.articleData
+                }
+                if(type == 'edit'){
+                    dispatch({
+                        type:'article/editNewsDeatil',
+                        payload:{
+                            ...params,
+                            id:id
+                        }
+                    }).then(()=>{
+                        this.props.onCancle();
+                        this.props.callback()
+                        this.setState({
+                            fileList:[],
+                            articleData:'<p>欢迎编辑文章!</p>'
+                        })
+                    })
+                }else{
+                    dispatch({
+                        type:'article/addNews',
+                        payload:{
+                            ...params
+                        }
+                    }).then(()=>{
+                        this.props.onCancle();
+                        this.props.callback()
+                        this.setState({
+                            fileList:[],
+                            articleData:'<p>欢迎编辑文章!</p>'
+                        })
+                    })
+                }
+
+            }
 
         })
     }
@@ -50,9 +100,36 @@ class ArticleModal extends React.Component{
           previewVisible: true,
         });
     };
+    componentDidMount(){
+        const { type } = this.props;
+        const { newsDetail } = this.props.article;
+        console.log('newsDetail',newsDetail)
+        if(type == 'edit'){
+            this.props.form.setFieldsValue({
+                type:newsDetail.type + '',
+                name:newsDetail.title,
+                abstract:newsDetail.summary
+            })
+            if(newsDetail.coverImgUrl){
+                this.setState({
+                    fileList:newsDetail.coverImgUrl.split(',').map((item,index)=>{
+                        let obj={};
+                        obj.url=item;
+                        obj.uid=index;
+                        return obj;
+                    })
+                })
+            }
+            if(newsDetail.content){
+                this.setState({
+                    articleData:newsDetail.content
+                })
+            }
+        }
+    }
     render(){
         const { getFieldDecorator } = this.props.form;
-        const { fileList,previewVisible,previewImage } = this.state;
+        const { fileList,previewVisible,previewImage,articleData } = this.state;
         const uploadButton = (
             <div>
               <Icon type="plus" />
@@ -62,7 +139,7 @@ class ArticleModal extends React.Component{
         return(
           <Modal 
             visible={this.props.visible}
-            title="添加文章"
+            title={this.props.type == 'add' ? "添加文章" : "修改文章"}
             footer={null}
             closable={false}
             destroyOnClose={true}
@@ -71,7 +148,7 @@ class ArticleModal extends React.Component{
            >
              <Form onSubmit={this.handleSubmit}>
                <Form.Item label="文章类别">
-                   {getFieldDecorator('name', {
+                   {getFieldDecorator('type', {
                        rules: [{
                            required: true,
                            message: '请选择文章类别',
@@ -90,8 +167,17 @@ class ArticleModal extends React.Component{
                        },
                        ],
                    })(<Input maxLength={30} placeholder="请输入标题（最多30个字）" autoComplete="off"/>)}
-               </Form.Item>    
-               <Form.Item label={<span> <span style={{color:"#f5222d",fontFamily:"SimSun"}}>*</span> 文章图片</span>}>
+               </Form.Item> 
+               <Form.Item label="摘要">
+                   {getFieldDecorator('abstract', {
+                       rules: [{
+                           required: true,
+                           message: '请输入摘要',
+                       },
+                       ],
+                   })(<TextArea rows={3} maxLength={100} placeholder="请输入标题（最多100个字）" autoComplete="off"/>)}
+               </Form.Item>     
+               <Form.Item label={<span> <span style={{color:"#f5222d",fontFamily:"SimSun"}}>*</span> 文章封面图片</span>}>
                     <Upload
                         listType="picture-card"
                         fileList={fileList}
@@ -106,7 +192,7 @@ class ArticleModal extends React.Component{
                <Form.Item style={{marginBottom:15}}>
                 <CKEditor
                         editor={ ClassicEditor }
-                        data="<p>Hello from CKEditor 5!</p>"
+                        data={articleData}
                         config={{
                             heading: {
                                 options: [
@@ -121,19 +207,22 @@ class ArticleModal extends React.Component{
                             language: 'zh-cn',
                             extraPlugins: [ upload.MyCustomUploadAdapterPlugin ],
                         }}
-                        ckfinder={{
-                            uploadUrl: "http://6liuhe.oss-cn-beijing.aliyuncs.com"
-                        }}
+                        // ckfinder={{
+                        //     uploadUrl: "http://6liuhe.oss-cn-beijing.aliyuncs.com"
+                        // }}
                         onInit={ editor => {
                             // You can store the "editor" and use when it is needed.
                             console.log( 'Editor is ready to use!', editor );
                         } }
                         onChange={ ( event, editor ) => {
                             const data = editor.getData();
-                            console.log( { event, editor, data } );
+                            // console.log( { event, editor, data } );
                         } }
                         onBlur={ ( event, editor ) => {
-                            console.log( 'Blur.', editor,editor.getData() );
+                            // console.log( 'Blur.', editor,editor.getData() );
+                            this.setState({
+                                articleData:editor.getData()
+                            })
                         } }
                         onFocus={ ( event, editor ) => {
                             console.log( 'Focus.', editor );

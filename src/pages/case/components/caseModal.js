@@ -125,14 +125,14 @@ class CaseModal extends React.Component{
         const { type } = this.props;
         if(type=='edit'){
             const { caseDetail } = this.props.case;
-            console.log('caseDetail',caseDetail)
+            // console.log('caseDetail',caseDetail)
             this.props.form.setFieldsValue({
-                caseType:caseDetail.type,
+                caseType:caseDetail.type+'',
                 name:caseDetail.title,
                 clientName:caseDetail.customerName,
                 serviceItem:caseDetail.serviceContent,
                 desc:caseDetail.description,
-                color:caseDetail.colorModel,
+                color:caseDetail.colorModel+'',
             })
             if(caseDetail.image){
                 this.setState({
