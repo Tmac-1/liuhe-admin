@@ -18,6 +18,7 @@ export default {
         *deleteNews({payload},{call,put}){
             const data = yield call(deleteNews,payload);
             if(data && data.code ==200){
+                message.success('删除成功~')
                yield put({type:'deleteNewsSuccess',payload:payload})
             }
         },
@@ -52,12 +53,12 @@ export default {
             }
         },
         deleteNewsSuccess(state,action){
-            console.log(state)
+            // console.log(action)
             return{
                 ...state,
                 newsList:{
-                    totalPage:~~state.newsDetail.totalPage - 1,
-                    record:state.newsList.record.filter(item=>item.id != action.paylaod.id)
+                    totalPage:~~state.newsList.totalPage - 1,
+                    record:state.newsList.record.filter(item=>item.id != action.payload.id)
                 }
             }
         },

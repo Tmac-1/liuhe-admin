@@ -26,6 +26,12 @@ export async function editCaseDeatil(params){
     })
 }
 
+export async function deleteCase(params){
+    return request(`/mis/case/${params.id}`,{
+        method:'delete'
+    })
+}
+
 export async function getCaseList(params){
     return request(`/mis/cases?page=${params.page}`,{
         method:'get',

@@ -40,6 +40,15 @@ class CaseManage extends React.Component{
           })
         })
     }
+    deleteCase = (id)=>{
+      const { dispatch } = this.props;
+      dispatch({
+        type:'case/deleteCase',
+        payload:{
+          id
+        }
+      })
+    }
     handleCallback=()=>{
          this.setState({
            current:1
@@ -86,7 +95,7 @@ class CaseManage extends React.Component{
               render: (text, record) => (
                 <span>
                    <Button type="primary" style={{marginRight:10}} onClick={this.editCase.bind(this,record.id)}>编辑</Button>
-                   <Button type="danger">删除</Button>
+                   <Button type="danger" onClick={this.deleteCase.bind(this,record.id)}>删除</Button>
                 </span>
               ),
             },

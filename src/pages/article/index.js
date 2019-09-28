@@ -53,7 +53,7 @@ class ArticleManage extends React.Component{
     handleDeleteNews = (id)=>{
       const { dispatch } = this.props;
       dispatch({
-        type:'article/deleteNewsSuccess',
+        type:'article/deleteNews',
         payload:{
           id
         }
