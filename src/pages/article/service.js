@@ -16,6 +16,7 @@ export async function getNewsDeatil(params){
     })
 }
 
+
 export async function editNewsDeatil(params){
     return request(`/mis/news/${params.id}`,{
         method:'put',
@@ -26,8 +27,14 @@ export async function editNewsDeatil(params){
     })
 }
 
+export async function deleteNews(params){
+    return request(`/mis/news/${params.id}`,{
+        method:'delete'
+    })
+}
+
 export async function getNewsList(params){
-    return request(`/mis/newses?page=${params.page}`,{
+    return request(`/mis/news?page=${params.page}`,{
         method:'get',
     })
 }

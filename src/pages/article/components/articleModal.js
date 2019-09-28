@@ -177,7 +177,7 @@ class ArticleModal extends React.Component{
                        ],
                    })(<TextArea rows={3} maxLength={100} placeholder="请输入标题（最多100个字）" autoComplete="off"/>)}
                </Form.Item>     
-               <Form.Item label={<span> <span style={{color:"#f5222d",fontFamily:"SimSun"}}>*</span> 文章封面图片</span>}>
+               <Form.Item label={<span> <span style={{color:"#f5222d",fontFamily:"SimSun"}}>*</span> 文章封面图片（建议尺寸480 × 480）</span>}>
                     <Upload
                         listType="picture-card"
                         fileList={fileList}

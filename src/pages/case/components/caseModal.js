@@ -238,7 +238,7 @@ class CaseModal extends React.Component{
                               <Option value="2"> 黑白 </Option>
                           </Select>)}
                     </Form.Item>
-                    <Form.Item label={<span> <span style={{color:"#f5222d",fontFamily:"SimSun"}}>*</span> 案例首页背景图</span>}>
+                    <Form.Item label={<span> <span style={{color:"#f5222d",fontFamily:"SimSun"}}>*</span> 案例首页背景图 （建议尺寸 815 × 678）</span>}>
                           <Upload
                             listType="picture-card"
                             fileList={fileList02}
@@ -250,7 +250,7 @@ class CaseModal extends React.Component{
                               {fileList02.length >= 1 ? null : uploadButton}
                           </Upload>
                     </Form.Item>
-                    <Form.Item label={<span> <span style={{color:"#f5222d",fontFamily:"SimSun"}}>*</span> 案例图片</span>}>
+                    <Form.Item label={<span> <span style={{color:"#f5222d",fontFamily:"SimSun"}}>*</span> 案例图片（建议尺寸 1800 × 1100）</span>}>
                           <Upload
                             listType="picture-card"
                             fileList={fileList}

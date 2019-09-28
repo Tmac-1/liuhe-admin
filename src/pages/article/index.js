@@ -50,6 +50,15 @@ class ArticleManage extends React.Component{
         })
       })
     }
+    handleDeleteNews = (id)=>{
+      const { dispatch } = this.props;
+      dispatch({
+        type:'article/deleteNewsSuccess',
+        payload:{
+          id
+        }
+      })
+    }
     loadData = ()=>{
       const { current } = this.state;
       const { dispatch } = this.props;
@@ -89,7 +98,7 @@ class ArticleManage extends React.Component{
               render: (text, record) => (
                 <span>
                    <Button type="primary" style={{marginRight:10}} onClick={this.handleEditNews.bind(this,record.id)}>编辑</Button>
-                   <Button type="danger">删除</Button>
+                   <Button type="danger" onClick={this.handleDeleteNews.bind(this,record.id)}>删除</Button>
                 </span>
               ),
             },
