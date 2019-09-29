@@ -51,7 +51,7 @@ class ImgUpload extends React.Component{
                closable={false}
             >
                 { this.props.type == 2 &&
-                  <p>（建议尺寸 2560 × 970 ）</p>
+                  <p>（ 建议尺寸 2560 × 970 ）</p>
                 }
                <Upload
                     listType="picture-card"
