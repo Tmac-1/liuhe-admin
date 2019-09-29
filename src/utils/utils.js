@@ -1,8 +1,12 @@
 import OSS from 'ali-oss';
-
+import { message } from 'antd';
 
 const uploadImg = (info)=>{
     // console.log('info',info)
+    if (info.file.size > 10485760/2) {
+        message.error('图片不可大于5MB！')
+        return false
+    }
     const client = new OSS({
         region: 'oss-cn-beijing',   // 创建Bucket时会选择不同地区，根据自己的选择填入对应名称
         accessKeyId: 'LTAI4FqLhaJZscodtwrrMzDR',     // 填入你的accessKeyId

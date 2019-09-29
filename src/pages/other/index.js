@@ -1,8 +1,11 @@
 import React from 'react';
 import styles from './index.less'
-import { Upload,Icon,Modal,message } from 'antd';
+import { Upload,Icon,Modal,message,Table,Button } from 'antd';
 import { connect } from 'dva';
-import { uploadImg } from '../../utils/utils'
+import { uploadImg } from '../../utils/utils';
+import ImgUpload from './component/ImgUpload';
+import moment from 'moment'
+
 @connect(state=>({
     global:state.global,
     other:state.other
@@ -11,41 +14,71 @@ class Other extends React.Component{
     state={
         previewVisible: false,
         previewImage: '',
-        fileList: [ // 合作商家logo
-        //   {
-        //     uid: '-1',
-        //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        //   }
-        ],
-        fileList02:[]
+        modalVisible:false,
+        title:'合作商家',
+        type:1, // 1 合作商家 2 banner图
     }
-    handlePreview = file => {
+    handleConfirm = (url)=>{
+        const { type } = this.state;
+        const { dispatch } = this.props
+        dispatch({
+            type:'other/addImg',
+            payload:{
+                type:type == 1 ? 2 : 1,
+                imgUrl:url
+            }
+        }).then(()=>{
+            message.success('添加成功~');
+            if(type == 1){
+                dispatch({
+                    type:'other/getImg',
+                    payload:{
+                        type:2
+                    }
+                })
+            }else{
+                dispatch({
+                    type:'other/getImg02',
+                    payload:{
+                        type:1
+                    }
+                })
+            }
+            this.setState({
+                modalVisible:false
+            })
+        })
+    }
+    handleDelete = (id)=>{
+        const { dispatch } = this.props;
+        const { type } = this.state;
+        dispatch({
+            type:'other/deleteImg',
+            payload:{
+                id
+            }
+        }).then(()=>{
+            dispatch({
+                type:'other/getImg',
+                payload:{
+                    type:2
+                }
+            })
+            dispatch({
+                type:'other/getImg02',
+                payload:{
+                    type:1
+                }
+            })
+        })
+    }
+    handlePreview = url => {
         this.setState({
-          previewImage: file.url || file.preview,
+          previewImage: url ,
           previewVisible: true,
         });
     }
-    handleRemove = (key,info)=>{
-        const { dispatch } = this.props;
-        if(key == 1){
-            const fileListCopy = [...this.state.fileList];
-            fileListCopy.splice(fileListCopy.findIndex(item=>item.uid === info.uid),1)
-            this.setState({
-                fileList: fileListCopy
-            },()=>{
-                dispatch({
-                    type:'other/addImg',
-                    payload:{
-                        type:2,
-                        imgUrl:this.state.fileList.map(item=>item.url).join(',')
-                    }
-                }).then(()=>{
-                    message.success('删除成功~')
-                })
-            });
-        }
-  
-    }
+
     handleCustomRequest = (key,info)=>{
         const { dispatch } = this.props;
         if(key == 1){
@@ -90,36 +123,70 @@ class Other extends React.Component{
             payload:{
                 type:2
             }
-        }).then(()=>{
-            const { imgs } = this.props.other;
-            this.setState({
-                fileList:imgs.record.map((item,index)=>{
-                    const obj = {}
-                    obj.url = item.imgUrl
-                    obj.uid = index;
-                    return obj
-                })
-            })
         })
         dispatch({
             type:'other/getImg02',
             payload:{
                 type:1
             }
-        }).then(()=>{
-            const { imgs02 } = this.props.other;
-            this.setState({
-                fileList02:imgs02.record.map((item,index)=>{
-                    const obj = {}
-                    obj.url = item.imgUrl
-                    obj.uid = index;
-                    return obj
-                })
-            })
         })
     }
     render(){
-        const { fileList,fileList02,previewVisible,previewImage } = this.state;
+        const { previewVisible,previewImage,modalVisible,title,type } = this.state;
+        const { dispatch } = this.props;
+        const { imgs,imgs02 } = this.props.other;
+        const columns = [
+            {
+              title: '图片缩略图',
+              dataIndex: 'title',
+              key: 'title',
+              render:(text,record) => <img 
+              onClick={this.handlePreview.bind(this,record.imgUrl)}
+              src={record.imgUrl} 
+              style={{color:'#1890ff',width:40,cursor:'pointer'}}></img>,
+            },
+            {
+              title: '类别',
+              dataIndex: 'modifyTime',
+              key: 'modifyTime',
+              render:modifyTime =><span> {"合作商家logo"}  </span>
+            },
+            {
+              title: '操作',
+              key: 'action',
+              render: (text, record) => (
+                <span>
+                   <Button type="danger" onClick={this.handleDelete.bind(this,record.id)}>删除</Button>
+                </span>
+              ),
+            },
+         ];
+         const columns02 = [
+            {
+              title: '图片缩略图',
+              dataIndex: 'title',
+              key: 'title',
+              render:(text,record) => <img 
+              onClick={this.handlePreview.bind(this,record.imgUrl)}
+              src={record.imgUrl} 
+              style={{color:'#1890ff',width:40,cursor:'pointer'}}></img>,
+            },
+            {
+              title: '类别',
+              dataIndex: 'modifyTime',
+              key: 'modifyTime',
+              render:modifyTime =><span> {"banner图"}  </span>
+            },
+            {
+              title: '操作',
+              key: 'action',
+              render: (text, record) => (
+                <span>
+                   <Button type="danger" onClick={this.handleDelete.bind(this,record.id)}>删除</Button>
+                </span>
+              ),
+            },
+         ];
         const uploadButton = (
             <div>
               <Icon type="plus" />
@@ -128,31 +195,44 @@ class Other extends React.Component{
         );
         return(
             <div className={styles.otherContainer}>
-                <p>合作商家logo上传</p>
+                {
+                    modalVisible && 
+                    <ImgUpload
+                        visible={modalVisible}
+                        title={title}
+                        dispatch={dispatch}
+                        onCofirm={this.handleConfirm}
+                        type={type}
+                        close={()=>{this.setState({modalVisible:false})}}
+                    />
+                }
+                <p><Button type="primary" onClick={()=>{
+                    this.setState({
+                        type:1,
+                        modalVisible:true,
+                        title:'合作商家'
+                    })
+                }}> 上传合作商家 </Button> </p>
+                <Table
+                  columns={columns}
+                  rowKey="id"
+                  dataSource={imgs.record}
+                  pagination={false}
+                />
+               <p style={{marginTop:20}}><Button type="primary" onClick={()=>{
+                    this.setState({
+                        type:2,
+                        modalVisible:true,
+                        title:'banner图'
+                    })
+                }}> 上传banner图 </Button> （建议尺寸 2560 × 970 ） </p>
                 <div>
-                    <Upload
-                        listType="picture-card"
-                        fileList={fileList}
-                        onPreview={this.handlePreview}
-                        customRequest={this.handleCustomRequest.bind(this,1)}
-                        accept="image/gif,image/jpeg,image/jpg,image/png"
-                        onRemove={this.handleRemove.bind(this,1)}
-                    >
-                        {uploadButton}
-                    </Upload>
-                </div>
-                <p>首页banner图上传（建议尺寸 2560 × 970 ）</p>
-                <div>
-                    <Upload
-                        listType="picture-card"
-                        fileList={fileList02}
-                        onPreview={this.handlePreview}
-                        customRequest={this.handleCustomRequest.bind(this,2)}
-                        accept="image/gif,image/jpeg,image/jpg,image/png"
-                        onRemove={this.handleRemove.bind(this,2)}
-                    >
-                        {uploadButton}
-                    </Upload>
+                <Table
+                  columns={columns02}
+                  rowKey="id"
+                  dataSource={imgs02.record}
+                  pagination={false}
+                />
                 </div>
                 <Modal visible={previewVisible} footer={null}  onCancel={()=>{this.setState({previewVisible:false})}}>
                    <img alt="example" style={{ width: '100%' }} src={previewImage} />

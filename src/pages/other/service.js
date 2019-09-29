@@ -15,6 +15,12 @@ export async function addImg(params){
     })
 }
 
+export async function deleteImg(params){
+    return request(`/mis/adImage/${params.id}`,{
+        method:'delete',
+    })
+}
+
 export async function getImg(params){
     return request(`/mis/adImages?type=${params.type}`,{
         method:'get',

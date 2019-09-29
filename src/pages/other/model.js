@@ -1,4 +1,4 @@
-import { addImg,getImg } from './service';
+import { addImg,getImg,deleteImg} from './service';
 import { message } from 'antd';
 
 export default {
@@ -14,6 +14,12 @@ export default {
             //    message.success('添加成功~')
            }
         },
+        *deleteImg({payload},{call,put}){
+            const data = yield call(deleteImg,payload);
+            if(data && data.code == 200){
+                message.success('删除成功~')
+            }
+         },
         *getImg({payload},{call,put}){
             const data = yield call(getImg,payload);
             if(data && data.code == 200){
