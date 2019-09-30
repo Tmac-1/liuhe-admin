@@ -50,11 +50,16 @@ class CaseManage extends React.Component{
       })
     }
     handleCallback=()=>{
-         this.setState({
-           current:1
-         },()=>{
-          this.handlePageChange(this.state.current)
-         })
+      if(this.state.type == 'edit'){
+          this.getCaseList(this.state.current-1)
+      }else{
+        this.setState({
+          current:1
+        },()=>{
+         this.handlePageChange(this.state.current)
+        })
+      }
+
     }
     handlePageChange =(current)=>{
       this.setState({

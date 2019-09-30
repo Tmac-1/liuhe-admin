@@ -26,7 +26,7 @@ export default {
             const data =  yield call(editCaseDeatil,paylaod);
          //    console.log("data",data)
             if(data && data.code == 200){
-                message.success('案例添加成功~')
+                message.success('案例修改成功~')
             }
          },
         *getCaseList({paylaod},{call,put}){

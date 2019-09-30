@@ -68,6 +68,7 @@ class CaseModal extends React.Component{
                     }
                 }).then(()=>{
                     this.props.onCancle()
+                    this.props.callback()
                     this.setState({
                         fileList:[],
                         fileList02:[]
