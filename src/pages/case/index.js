@@ -83,6 +83,14 @@ class CaseManage extends React.Component{
               render: (text,record) => <span style={{color:'#1890ff'}}>{record.title}</span>,
             },
             {
+              title: '案例分类',
+              dataIndex: 'type',
+              key: 'type',
+              render: (text,record) => <span>{record.type == 1 ? 'logo/VI设计' : record.type == 2 ? '画册设计' : 
+               record.type == 3 ? '包装设计' : record.typ  == 4 ? '文化墙设计' : '线上与宣传'
+              }</span>,
+            },
+            {
               title: '客户名称',
               dataIndex: 'customerName',
               key: 'customerName',
