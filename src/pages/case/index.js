@@ -11,6 +11,7 @@ import moment from 'moment';
 }))
 class CaseManage extends React.Component{
     state={
+      testcount:0,
       caseModalVisible:false,
       caseId:'',
       type:'add',
@@ -69,7 +70,31 @@ class CaseManage extends React.Component{
     }
     componentDidMount(){
       this.getCaseList()
+      this.setState((prevState)=>{
+        console.log('----->',prevState.testcount)
+        return {
+          testcount:prevState.testcount+1
+        }
+      })
+      this.setState((prevState)=>{
+        console.log('----->',prevState.testcount)
+        return {
+          testcount:prevState.testcount+1
+        }
+      })
+      // this.setState({
+      //     testcount:this.state.testcount + 1
+      // })
+      // this.setState({
+      //     testcount:this.state.testcount + 1
+      // })
     }
+    handleTest = ()=>{
+      console.log(this.state.testcount)
+      this.setState((prevState)=>({
+          testcount:prevState.testcount+1
+      }))
+   }
     render(){
         const { caseModalVisible,type,caseId,current } = this.state;
         const { caseList } = this.props.case;
@@ -115,6 +140,7 @@ class CaseManage extends React.Component{
          ];
         return(
             <div className={styles.caseContainer}>
+                <Button onClick={this.handleTest}>点击</Button>
             {
               caseModalVisible && 
               <CaseModal
