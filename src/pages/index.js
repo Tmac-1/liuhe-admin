@@ -19,6 +19,13 @@ class Login extends React.Component{
       }
     });
   };
+  componentDidMount(){
+    // const { location } = this.props;
+    // console.log('location',location)
+    if(cookies.get('liuhe-token')){
+      router.push('/case')
+    }
+  }
   render(){
     const { getFieldDecorator } = this.props.form;
     return (

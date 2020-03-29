@@ -140,7 +140,7 @@ class CaseManage extends React.Component{
          ];
         return(
             <div className={styles.caseContainer}>
-                <Button onClick={this.handleTest}>点击</Button>
+                {/* <Button onClick={this.handleTest}>点击</Button> */}
             {
               caseModalVisible && 
               <CaseModal

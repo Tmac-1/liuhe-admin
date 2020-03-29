@@ -9,8 +9,8 @@ const uploadImg = (info)=>{
     }
     const client = new OSS({
         region: 'oss-cn-beijing',   // 创建Bucket时会选择不同地区，根据自己的选择填入对应名称
-        accessKeyId: 'LTAI4FqLhaJZscodtwrrMzDR',     // 填入你的accessKeyId
-        accessKeySecret: 'rYh3RuG4EJoUNtDYgY92YLsDRrhpwH', // 填入你的accessKeySecret
+        accessKeyId: 'LTAI4Fkop3t67rSaGTYzKjKa',// 填入你的accessKeyId 'LTAI4FqLhaJZscodtwrrMzDR', 
+        accessKeySecret: 'KhT9SbHvpK3MA64FVtyJFXwciGhOgo', // 填入你的accessKeySecret
         bucket: '6liuhe'                // 填入你的bucket名
     })
 

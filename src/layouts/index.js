@@ -20,9 +20,6 @@ function BasicLayout(props) {
         <> {props.children} </>  
       }
     </div>
-
-
-
   );
 }
 
