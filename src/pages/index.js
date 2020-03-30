@@ -13,7 +13,7 @@ class Login extends React.Component{
       if (!err) {
         console.log('Received values of form: ', values);
         if(values.username == 'admin' && values.password == 'liuhe123456'){
-          router.push('/case');
+          router.push('/case.html');
           cookies.set('liuhe-token','123456')
         }
       }
@@ -23,7 +23,7 @@ class Login extends React.Component{
     // const { location } = this.props;
     // console.log('location',location)
     if(cookies.get('liuhe-token')){
-      router.push('/case')
+      router.push('/case.html')
     }
   }
   render(){
