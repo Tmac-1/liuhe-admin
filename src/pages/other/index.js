@@ -84,7 +84,7 @@ class Other extends React.Component{
         if(key == 1){
             uploadImg(info).then(res=>{
                 this.setState({
-                    fileList:this.state.fileList.concat({uid:res.name,url:`http://img.bjliuhe.net.cn/${res.name}`})
+                    fileList:this.state.fileList.concat({uid:res.name,url:`https://6liuhe.oss-cn-beijing.aliyuncs.com/${res.name}`})
                 },()=>{
                     dispatch({
                         type:'other/addImg',
@@ -101,7 +101,7 @@ class Other extends React.Component{
         if(key == 2){
             uploadImg(info).then(res=>{
                 this.setState({
-                    fileList02:this.state.fileList02.concat({uid:res.name,url:`http://img.bjliuhe.net.cn/${res.name}`})
+                    fileList02:this.state.fileList02.concat({uid:res.name,url:`https://6liuhe.oss-cn-beijing.aliyuncs.com/${res.name}`})
                 },()=>{
                     dispatch({
                         type:'other/addImg02',

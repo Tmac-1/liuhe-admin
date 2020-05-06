@@ -20,7 +20,7 @@ const uploadImg = (info)=>{
 
     return new Promise((resolve,reject)=>{
         client.multipartUpload(filename, info.file).then(res => {   // 上传
-            // console.log('上传成功：',res)
+            console.log('上传成功：',res)
             resolve(res)
             // ... 你的操作，可以拼接图片url，用于显示等...
         }).catch(err => {

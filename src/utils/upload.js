@@ -23,7 +23,7 @@ class MyUploadAdapter {
                 // console.log(file)
                 uploadImg({file:file}).then((res)=>{
                     resolve({
-                        default:`http://img.bjliuhe.net.cn/${res.name}`
+                        default:`https://6liuhe.oss-cn-beijing.aliyuncs.com/${res.name}`
                     })
                 })
             })

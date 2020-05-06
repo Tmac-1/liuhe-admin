@@ -32,7 +32,7 @@ class ArticleModal extends React.Component{
     handleCustomRequest = (info)=>{
         uploadImg(info).then(res=>{
             this.setState({
-                fileList:this.state.fileList.concat({uid:res.name,url:`http://img.bjliuhe.net.cn/${res.name}`})
+                fileList:this.state.fileList.concat({uid:res.name,url:`https://6liuhe.oss-cn-beijing.aliyuncs.com/${res.name}`})
             })
         })
     }
