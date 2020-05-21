@@ -122,6 +122,12 @@ class CaseManage extends React.Component{
               render: (text,record) => <span>{record.customerName}</span>,
             },
             {
+              title: '优先级',
+              dataIndex: 'sort',
+              key: 'sort',
+              render: (text,record) => <span>{record.sort}</span>
+            },
+            {
               title: '更新时间',
               dataIndex: 'modifyTime',
               key: 'modifyTime',

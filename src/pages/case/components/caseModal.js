@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal,Upload,Form,Input, Select,Icon,Button,message } from 'antd'
+import { Modal,Upload,Form,Input, Select,Icon,Button,message,InputNumber } from 'antd'
 import  styles  from './caseModal.less';
 import { connect } from 'dva';
 import { uploadImg } from '../../../utils/utils'
@@ -50,6 +50,7 @@ class CaseModal extends React.Component{
                 return;
             }
             let params = {
+                sort:values.sort,
                 type:values.caseType,
                 title:values.name,
                 customerName:values.clientName,
@@ -128,6 +129,7 @@ class CaseModal extends React.Component{
             const { caseDetail } = this.props.case;
             // console.log('caseDetail',caseDetail)
             this.props.form.setFieldsValue({
+                sort:caseDetail.sort,
                 caseType:caseDetail.type+'',
                 name:caseDetail.title,
                 clientName:caseDetail.customerName,
@@ -176,6 +178,17 @@ class CaseModal extends React.Component{
               wrapClassName={styles.caseModal}
             >
                 <Form  onSubmit={this.handleSubmit}>
+                    <Form.Item label="优先级">
+                        {getFieldDecorator('sort', {
+                            initialValue:100,
+                            rules: [{
+                                required: true,
+                                message: '请输入优先级',
+                            },
+                            ],
+                        })(<InputNumber  placeholder="优先级" min={0} max={1000} style={{width:100}}>
+                           </InputNumber>)}
+                    </Form.Item>                    
                      <Form.Item label="案例类别">
                         {getFieldDecorator('caseType', {
                             rules: [{
